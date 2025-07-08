@@ -66,6 +66,20 @@ fn add_person_to_department(person: &str, dep: &str, register: &mut HashMap<Stri
         names.push(person.to_string());
     }
 }
+fn get_people_from_department(
+    register: HashMap<String, Vec<String>>,
+    dep: &str,
+) -> Option<Vec<String>> {
+    let names = register.get(dep);
+    match names {
+        None => Option::None,
+        Some(ns) => {
+            let mut sorted = ns.clone();
+            sorted.sort();
+            Option::Some(sorted)
+        }
+    }
+}
 
 fn to_platin(s: &str) -> String {
     let (first, rest) = s.split_at(1); // s.chars().take(1).last().unwrap();
@@ -93,7 +107,7 @@ fn to_platin(s: &str) -> String {
 mod tests {
     use std::collections::HashMap;
 
-    use crate::{add_person_to_department, median, mode, to_platin};
+    use crate::{add_person_to_department, get_people_from_department, median, mode, to_platin};
 
     #[test]
     fn case1() {
@@ -128,5 +142,11 @@ mod tests {
         add_person_to_department("bob", "eng", &mut reg);
         assert_eq!(reg.len(), 1); // only 1 dep added
         assert_eq!(reg.get("eng").unwrap().len(), 2); // no repeated person in a dep
+        let names = get_people_from_department(reg, "eng");
+        assert_eq!(names.unwrap(), vec!["bob", "sally"]);
+
+        let reg2: HashMap<String, Vec<String>> = HashMap::new();
+        let names2 = get_people_from_department(reg2, "eng");
+        assert_eq!(names2, Option::None);
     }
 }
