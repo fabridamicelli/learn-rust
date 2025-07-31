@@ -9,6 +9,14 @@ fn main() {
     // You can optionally experiment here.
 }
 
+impl AppendBar for Vec<String> {
+    fn append_bar(self) -> Self {
+        let mut new = self.clone();
+        new.push("Bar".to_string());
+        new
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
